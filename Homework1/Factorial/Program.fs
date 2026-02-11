@@ -18,5 +18,3 @@ while flag do
             let answer = factorial number
             printfn "%d" answer
         with ex -> printfn "%s" ex.Message
-    
-    
