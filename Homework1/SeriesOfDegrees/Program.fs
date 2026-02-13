@@ -1,18 +1,24 @@
-﻿open System
+﻿module Program
 
-let degree n m =
-    if n < 0 then failwith "Error: n should be more than zero"
-    if m < 0 then failwith "Error: m should be more than zero"
-    else
-        let first = 1 <<< n
-        List.init(m + 1) (fun i -> first * (1 <<< i))
+open System
+open Degree
 
-let main = 
+[<EntryPoint>]
+let main _ = 
+    let readInt (prompt: string) : Option<int> =
+        printf "%s" prompt
+        let input = Console.ReadLine()
+        match Int32.TryParse(input) with
+        | (true, value) -> Some value
+        | (false, _) -> None
 
     printfn "Enter the numbers: n - initial degree, m - number of degrees that will be added to n."
-    try
-        let n = Int32.Parse(Console.ReadLine())
-        let m = Int32.Parse(Console.ReadLine())
-        let list = degree n m
-        printfn "%A" list
-    with ex-> printfn "%s" ex.Message
+    match readInt "n = ", readInt "m = " with
+    | Some n, Some m ->
+        match degree n m with
+        | Ok list -> printfn "%A" list
+        | Error msg -> printfn "Error: %s" msg
+    | None, _ -> printfn "Error: invalid input for n"
+    | _, None -> printfn "Error: invalid input for m"
+
+    0
