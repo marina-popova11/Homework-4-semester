@@ -1,18 +1,17 @@
-﻿open System
+﻿module Program
 
-let reverse list =
-    let rec loop acc lst =
-        match lst with
-        | [] -> acc
-        | x :: xs -> loop (x :: acc) xs
-    loop [] list 
+open System
+open Reverse
 
-let readArrayFromConsole() =
-    printfn "Enter the symbols in array"
-    let input = Console.ReadLine()
-    input.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-    |> Array.toList
+[<EntryPoint>]
+let main _ =
+    let readArrayFromConsole() =
+        printfn "Enter the symbols in array"
+        let input = Console.ReadLine()
+        input.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+        |> Array.toList
 
-let list = readArrayFromConsole()
-let newList= reverse list
-printfn "%A" newList
+    let list = readArrayFromConsole()
+    let newList = reverse list
+    printfn "%A" newList
+    0
