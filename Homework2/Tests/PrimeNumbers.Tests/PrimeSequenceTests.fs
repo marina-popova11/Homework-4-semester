@@ -3,10 +3,6 @@
 open NUnit.Framework
 open PrimeSequence
 
-[<SetUp>]
-let Setup () =
-    ()
-
 [<Test>]
 let Test_Create10 () =
     let expected = [2; 3; 5; 7; 11; 13; 17; 19; 23; 29]
