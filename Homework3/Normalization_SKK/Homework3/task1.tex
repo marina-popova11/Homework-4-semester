@@ -1,0 +1,31 @@
+\documentclass[30pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath, amssymb}
+
+\begin{document}
+
+\section{Normalization}
+\[
+T_0 = ((\lambda a. (\lambda b. b\ b)\ (\lambda b. b\ b))\ b)\ ((\lambda c. (c\ b))\ (\lambda a. a))
+\]
+\[
+(\lambda b. b\ b) = (\lambda b. b\ b)\ (\lambda b. b\ b)
+\]
+\[
+((\lambda a. (\lambda b. b\ b)\ (\lambda b. b\ b))\ b) = (\lambda b. b\ b)\ (\lambda b. b\ b))
+\]
+\[
+T_1 = ((\lambda b. b\ b)\ (\lambda b. b\ b)) ((\lambda c. (c\ b))\ (\lambda a. a))
+\]
+\[
+(\lambda b. b\ b)\ (\lambda b. b\ b) = (\lambda b. b\ b)\ (\lambda b. b\ b)
+\]
+\[
+T_2 = ((\lambda b. b\ b)\ (\lambda b. b\ b)) ((\lambda c. (c\ b))\ (\lambda a. a)) => T_2 = T_1 - infinite\ reduction
+\]
+\[
+((\lambda c. (c\ b))\ (\lambda a. a)) = ((\lambda a. a\ b)) = b
+\]
+\end{document}

@@ -1,0 +1,39 @@
+\documentclass[30pt,fleqn]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath, amssymb}
+
+\begin{document}
+
+\section{SKK}
+
+\[
+S K K = I
+\]
+\[
+Prove: S = \lambda x.\lambda y.\lambda z.x z (y z)
+\]
+\[
+K = \lambda x.\lambda y.x
+\]
+\[
+\begin{aligned}
+S\ K\ K &= (S\ K)\ K \\
+&= ((\lambda x.\lambda y.\lambda z.x\ z\ (y\ z))\ K)\ K \\
+&\to_\beta (\lambda y.\lambda z.K\ z\ (y\ z))\ K \\
+&= (\lambda x.\lambda y.K\ y\ (x\ y))\ K) \\
+&\to_\beta \lambda y.K\ y\ (K\ y) \\
+&= (\lambda x.K\ x\ (K\ x)) = K\ x\ (K\ x) = x
+\end{aligned}
+\]
+\[
+\begin{aligned}
+I = \lambda x.x = x
+\end{aligned}
+\]
+\[
+S\ K\ K &= I \qquad \square
+\]
+
+\end{document}
