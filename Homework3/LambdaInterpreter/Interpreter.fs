@@ -17,6 +17,18 @@ let rec replace x t s =
 
 let rec reduction term =
     match term with
-    | Var v -> v
-    | App (f, g) -> reduction 
-    | Abs (term1, term2) -> reduction 
+    | Var v -> term
+    | App (Abs (y, body), arg) -> replace y body arg 
+    | App (f, arg) -> 
+        let stepF = reduction f
+        if f <> stepF then App (stepF, arg)
+        else
+            let stepArg = reduction arg
+            if arg <> stepArg then App (f, stepArg)
+            else
+                term
+    | Abs (y, body) ->
+        let stepB = reduction body
+        if body <> stepB then Abs (y, stepB)
+        else
+            term
