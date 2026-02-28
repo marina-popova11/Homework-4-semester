@@ -51,13 +51,13 @@ let display (database: Database) =
         database |> List.iter (fun x ->
             let name = x.Name
             let number = x.PhoneNumber
-            printfn $"{name}:{number}")
+            printfn $"{name}: {number}")
 
 let serialize (database: Database) : string =
     database |> List.map (fun x ->
         let (Name name) = x.Name
         let (PhoneNumber number) = x.PhoneNumber
-        $"{name}:{number}")
+        $"{name}: {number}")
     |> String.concat "\n"
 
 let deserialize (data: string) : OperationResult<Database> =
@@ -66,10 +66,10 @@ let deserialize (data: string) : OperationResult<Database> =
     else
         try
             let notes = 
-                data.Split("\n")
+                data.Split('\n')
                 |> Array.filter (not << System.String.IsNullOrWhiteSpace)
                 |> Array.map (fun line ->
-                    let parts = line.Split('-')
+                    let parts = line.Split(':')
                     if parts.Length <> 2 then invalidArg "line" "Invalid string format!"
                     {Name = Name (parts.[0].Trim()); PhoneNumber = PhoneNumber (parts.[1].Trim())})
                 |> Array.toList

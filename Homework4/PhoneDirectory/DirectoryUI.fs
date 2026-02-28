@@ -35,15 +35,17 @@ let rec options (database: Database) =
         printfn "Enter the name to search phone number: "
         let name = Console.ReadLine()
         let message = search database "name" name
-        printfn $"message"
+        printfn $"{message}"
         options database
     | "3" ->
         printfn "Enter the phone number to search phone name: "
         let number = Console.ReadLine()
         let message = search database "phone" number
-        printfn $"message"
+        printfn $"{message}"
         options database
-    | "4" -> display database
+    | "4" ->
+        display database
+        options database
     | "5" ->
         printfn "Enter the filename: "
         let filename = Console.ReadLine()
@@ -53,6 +55,7 @@ let rec options (database: Database) =
             try
                 File.WriteAllText(filename, notes)
                 printfn $"Database was successfully copied to a file {filename}!"
+                options database
             with ex ->
                 printfn $"Error: {ex.Message}"
     | "6" ->
@@ -63,7 +66,7 @@ let rec options (database: Database) =
             let notes = File.ReadAllText(filename)
             match deserialize notes with
             | Success (newDatabase, message) ->
-                printfn $"message"
+                printfn $"{message}"
                 options newDatabase
             | Failure (message) ->
                 printfn $"{message}"
