@@ -11,7 +11,7 @@ let printOptions () =
 2 - Search by name,
 3 - Search by number,
 4 - Display all the current contents of the database,
-5 - Save data,
+5 - Save data in file,
 6 - Read data from a file.
 """
     printfn "Enter the option number that you would like to use: "
