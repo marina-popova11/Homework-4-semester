@@ -32,8 +32,3 @@ let isValid (seq: string) =
                 check stack tail
 
     check [] (List.ofSeq seq)
-
-
-
-                
-
