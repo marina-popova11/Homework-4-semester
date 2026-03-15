@@ -4,16 +4,20 @@ open System
 
 let rnd = Random()
 
-type Computer (id: int, os: string) =
+type Computer (id: int, os: string, ?probability: int) =
+    let prob =
+        match probability with
+        | Some p -> p
+        | None ->
+            match os with
+            | "Windows" -> 50
+            | "Linux" -> 40
+            | "MacOS" -> 60
+            | _ -> 100
     member c.ID = id
     member c.Os = os
     member val  IsInfected = false with get, set
-    member c.ProbOfInfection =
-        match c.Os with
-        | "Windows" -> 50
-        | "Linux" -> 40
-        | "MacOS" -> 60
-        | _ -> 100
+    member c.ProbOfInfection = prob
 
     member c.TryInfect() =
         if c.IsInfected then false
