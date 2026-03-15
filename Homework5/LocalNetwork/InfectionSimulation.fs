@@ -11,11 +11,12 @@ let chooseRandom number =
 let start (network: Network) =
     let number = chooseRandom network.Size
     network.Infect(number)
-    printfn "Initial infection: computer %d" number
+    network.PrintStatus(0)
     let mutable numberSteps = 0
     let mutable flag = true
     while flag do
+        numberSteps <- numberSteps + 1
         let step = network.Step()
+        network.PrintStatus(numberSteps)
         if not step then flag <- false
-        else numberSteps <- numberSteps + 1
     numberSteps

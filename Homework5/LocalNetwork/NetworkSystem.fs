@@ -10,10 +10,10 @@ type Computer (id: int, os: string) =
     member val  IsInfected = false with get, set
     member c.ProbOfInfection =
         match c.Os with
-        | "Windows" -> 30
-        | "Linux" -> 50
+        | "Windows" -> 50
+        | "Linux" -> 40
         | "MacOS" -> 60
-        | _ -> 30
+        | _ -> 100
 
     member c.TryInfect() =
         if c.IsInfected then false
@@ -56,3 +56,10 @@ type Network (computers: Computer[]) =
                     if attempt then buffer <- i :: buffer
         
         buffer.Length > 0
+
+    member n.PrintStatus(step: int) =
+        printfn $"Step: {step}"
+        for i in 0 .. size - 1 do
+            let comp = computers.[i]
+            let status = if comp.IsInfected then "Infected" else "Healthy"
+            printfn $"PC: {comp.ID}, {comp.Os}, {status}"

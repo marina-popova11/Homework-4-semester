@@ -29,6 +29,7 @@ let main _ =
     printfn "Start:"
     let totalSteps = start network
     let mutable infectedCount = 0
+    printfn "Final status: "
     for i in 0 .. network.Size - 1 do
         let comp = computers.[i]
         if comp.IsInfected then 
