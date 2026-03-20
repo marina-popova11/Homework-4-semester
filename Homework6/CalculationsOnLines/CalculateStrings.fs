@@ -2,6 +2,10 @@ module CalculateStrings
 
 open System
 
+let safeDivide x y = 
+    if y = 0 then None 
+    else Some (x / y)
+
 type CalculateBuilder() =
     member this.Bind(x: string, f) =
         match Int32.TryParse(x) with
@@ -10,3 +14,5 @@ type CalculateBuilder() =
         | (false, _) ->
             None
     member this.Return(x: int) : Option<int> = Some x
+
+    member this.ReturnFrom(x: Option<int>) : Option<int> = x

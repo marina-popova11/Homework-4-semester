@@ -7,9 +7,9 @@ let main _ =
     let calculate = CalculateBuilder()
     let result = calculate {
         let! x = "1"
-        let! y = "Z"
-        let z = x + y
-        return z
+        let! y = "0"
+        let z = safeDivide x y
+        return! z
     }
 
     match result with
