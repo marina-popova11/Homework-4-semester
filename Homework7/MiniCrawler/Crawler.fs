@@ -1,6 +1,7 @@
 module Crawler
 
 open System
+open System.Net
 open System.Net.Http
 open System.Text.RegularExpressions
 open System.Threading
@@ -8,6 +9,7 @@ open System.Threading
 let downloadOnePageAsync (url: string) =
     async {
         let client = new HttpClient()
+        client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
         try
             let! html = client.GetStringAsync(url) |> Async.AwaitTask
             return html
@@ -23,7 +25,8 @@ let extractLink (html: string) =
     |> Seq.cast<Match> |> Seq.choose (fun x ->
         let urlGroup = x.Groups.["url"]
         if urlGroup.Success && not (String.IsNullOrEmpty(urlGroup.Value)) then
-            Some urlGroup.Value
+            let decodedUrl = WebUtility.HtmlDecode(urlGroup.Value)
+            Some decodedUrl
         else
             None
         )
