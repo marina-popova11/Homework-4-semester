@@ -3,6 +3,7 @@ module Crawler
 open System
 open System.Net.Http
 open System.Text.RegularExpressions
+open System.Threading
 
 let downloadOnePageAsync (url: string) =
     async {
@@ -17,7 +18,7 @@ let downloadOnePageAsync (url: string) =
     }
 
 let extractLink (html: string) =
-    let pattern = @"<a\s+(?:[^>]*?\s+)?href=""(http://[^""]*)""|<a\s+(?:[^>]*?\s+)?href='([^']*)'"
+    let pattern = @"<a\s+(?:[^>]*?\s+)?href=""(?<url>https?://[^""]*)""|<a\s+(?:[^>]*?\s+)?href='(?<url>[^']*)'"
     Regex.Matches(html, pattern)
     |> Seq.cast<Match> |> Seq.choose (fun x ->
         let urlGroup = x.Groups.["url"]
@@ -36,5 +37,10 @@ let processPageAsync (link: string) =
     }
 
 let parallelDownload (link: string) =
-    processPageAsync link
-    Async.Parallel()
+    async {
+        let! html = downloadOnePageAsync link
+        let links = extractLink html
+        printfn $"Links found: {links.Length}"
+        let allTasks =  links |> List.map processPageAsync
+        do! allTasks |> Async.Parallel |> Async.Ignore
+    }
