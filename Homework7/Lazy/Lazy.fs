@@ -1,7 +1,7 @@
 module Lazy
 
 open System.Threading
-open LazyLib
+open ILazy
 
 type private LazyState<'a> () =
     let mutable isComputed = 0
