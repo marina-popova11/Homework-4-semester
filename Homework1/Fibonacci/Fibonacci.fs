@@ -1,9 +1,13 @@
 module Fibonacci
-let rec fibonacci n  =
-    if n < 0 then None
-    else
-        let rec loop i a b  = 
-            if i = n then Some a
+let fibonacci n  =
+    match n with
+    | n when n < 0 -> None
+    | 0 -> Some 0
+    | 1 -> Some 1
+    | _ -> 
+        let rec stepFib i prev cur  = 
+            if i = n then Some prev
             else
-                loop (i + 1) b (a + b)
-        loop 0 0 1
+                stepFib (i + 1) cur (prev + cur)
+        stepFib 0 0 1
+        

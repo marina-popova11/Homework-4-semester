@@ -1,8 +1,8 @@
 module Reverse
 
 let reverse list =
-    let rec loop acc lst =
+    let rec stepReverse acc lst =
         match lst with
         | [] -> acc
-        | x :: xs -> loop (x :: acc) xs
-    loop [] list 
+        | x :: xs -> stepReverse (x :: acc) xs
+    stepReverse [] list 
