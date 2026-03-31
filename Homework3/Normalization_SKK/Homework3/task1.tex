@@ -1,4 +1,4 @@
-\documentclass[30pt]{article}
+\documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T2A]{fontenc}
 \usepackage[russian]{babel}
@@ -6,26 +6,32 @@
 
 \begin{document}
 
-\section{Normalization}
 \[
 T_0 = ((\lambda a. (\lambda b. b\ b)\ (\lambda b. b\ b))\ b)\ ((\lambda c. (c\ b))\ (\lambda a. a))
 \]
+
 \[
-(\lambda b. b\ b) = (\lambda b. b\ b)\ (\lambda b. b\ b)
+(\lambda c. (c\ b))\ (\lambda a. a) \rightarrow_\beta ((\lambda a. a)\ b) \rightarrow_\beta b
 \]
+
 \[
-((\lambda a. (\lambda b. b\ b)\ (\lambda b. b\ b))\ b) = (\lambda b. b\ b)\ (\lambda b. b\ b))
+T_1 = ((\lambda a. (\lambda b. b\ b)\ (\lambda b. b\ b))\ b)\ b
 \]
+
 \[
-T_1 = ((\lambda b. b\ b)\ (\lambda b. b\ b)) ((\lambda c. (c\ b))\ (\lambda a. a))
+((\lambda a. (\lambda b. b\ b)\ (\lambda b. b\ b))\ b) \rightarrow_\beta (\lambda b. b\ b)\ (\lambda b. b\ b)
 \]
+
 \[
-(\lambda b. b\ b)\ (\lambda b. b\ b) = (\lambda b. b\ b)\ (\lambda b. b\ b)
+T_2 = ((\lambda b. b\ b)\ (\lambda b. b\ b))\ b
 \]
+
 \[
-T_2 = ((\lambda b. b\ b)\ (\lambda b. b\ b)) ((\lambda c. (c\ b))\ (\lambda a. a)) => T_2 = T_1 - infinite\ reduction
+(\lambda b. b\ b)\ (\lambda b. b\ b) \rightarrow_\beta (\lambda b. b\ b)\ (\lambda b. b\ b)
 \]
+
 \[
-((\lambda c. (c\ b))\ (\lambda a. a)) = ((\lambda a. a\ b)) = b
+\text{Нормальная форма не существует (бесконечная редукция)}
 \]
+
 \end{document}

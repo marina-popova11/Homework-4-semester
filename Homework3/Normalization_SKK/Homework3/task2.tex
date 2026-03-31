@@ -1,37 +1,37 @@
-\documentclass[30pt,fleqn]{article}
-\usepackage[utf8]{inputenc}
+\documentclass[12pt]{article}
 \usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
 \usepackage[russian]{babel}
 \usepackage{amsmath, amssymb}
 
 \begin{document}
 
-\section{SKK}
+\[
+S = \lambda x. \lambda y. \lambda z.\ xz\ (yz)
+\]
+\[
+K = \lambda x. \lambda y.\ x
+\]
+\[
+I = \lambda x.\ x
+\]
 
 \[
-S K K = I
+S\ K\ K = (\lambda x. \lambda y. \lambda z.\ x\ z\ (y\ z))\ K\ K
 \]
 \[
-Prove: S = \lambda x.\lambda y.\lambda z.x z (y z)
+\rightarrow_\beta (\lambda y. \lambda z.\ K\ z\ (y\ z))\ K
 \]
 \[
-K = \lambda x.\lambda y.x
+\rightarrow_\beta \lambda z.\ K\ z\ (K\ z)
 \]
 \[
-\begin{aligned}
-S\ K\ K &= (S\ K)\ K \\
-&= ((\lambda x.\lambda y.\lambda z.x\ z\ (y\ z))\ K)\ K \\
-&\to_\beta (\lambda y.\lambda z.K\ z\ (y\ z))\ K \\
-&= (\lambda x.\lambda y.K\ y\ (x\ y))\ K) \\
-&\to_\beta \lambda y.K\ y\ (K\ y) \\
-&= (\lambda x.K\ x\ (K\ x)) = K\ x\ (K\ x) = x
-\end{aligned}
+\rightarrow_\beta \lambda z.\ (\lambda y.\ z)\ (K\ z)
 \]
 \[
-\begin{aligned}
-I = \lambda x.x = x
-\end{aligned}
+\rightarrow_\beta \lambda z.\ z\ =\ I
 \]
+
 \[
 S\ K\ K &= I \qquad \square
 \]
