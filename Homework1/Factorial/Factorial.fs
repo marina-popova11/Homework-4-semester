@@ -1,6 +1,6 @@
 module Factorial
 
-let rec factorial x =
+let factorial x =
     let rec loop acc n =
         if n <= 0 then acc
         else
