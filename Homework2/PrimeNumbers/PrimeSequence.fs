@@ -1,24 +1,17 @@
 module PrimeSequence
 
 let isPrime n =
-    if n < 2 then false
-    elif n = 2 then true
-    elif n % 2 = 0 then false
-    else
+    match n with
+    | n when n < 2 -> false
+    | n when n = 2 -> true
+    | n when n % 2 = 0 -> false
+    | _ ->
         let border = int (sqrt (float n))
-        let rec check m =
-            if m > border then true
-            elif n % m = 0 then false
-            else
-                check (m + 2)
-        check 3
+        seq { 3 .. border }
+        |> Seq.forall (fun m -> n % m <> 0)       
 
 let rec createPrime =
     seq {
         yield 2
-        let mutable number = 3
-        while true do
-            if isPrime number then 
-                yield number
-            number <- number + 2
+        yield! Seq.initInfinite (fun x -> 2 * x + 3) |> Seq.filter isPrime
     }
