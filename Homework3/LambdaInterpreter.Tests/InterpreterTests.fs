@@ -23,17 +23,17 @@ let Test_SimpleAbstractionReplace () =
 [<Test>]
 let Test_SimpleReduction () =
     let expr = App (Abs ("x", Var "x"), Var "y")
-    let result = reduction expr
+    let result = reduce expr
     Assert.That(result, Is.EqualTo(Var "y"))
 
 [<Test>]
 let Test_Reduction () =
     let expr = App (Abs ("x", Var "z"), Var "y")
-    let result = reduction expr
+    let result = reduce expr
     Assert.That(result, Is.EqualTo(Var "z"))
 
 [<Test>]
 let Test_LeftReduction () =
     let expr = App (App (Abs ("x", App (Var "x", Var "z")), Var "y"), Var "z")
-    let result = reduction expr
+    let result = reduce expr
     Assert.That(result, Is.EqualTo(App (App (Var "y", Var "z"), Var "z")))

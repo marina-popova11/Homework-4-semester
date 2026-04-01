@@ -9,6 +9,6 @@ let main _ =
     let fullLeft = App(leftPart, Var "b")
     let rightPart = App (Abs ("c", App(Var "c", Var "b")), Abs("a", Var "a"))
     let startTerm = App (fullLeft, rightPart)
-    let result = reduction startTerm
+    let result = reduce startTerm
     printfn "Result: All were calculated"
     0
