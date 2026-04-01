@@ -15,25 +15,25 @@ type private LazyState<'a> () =
 
     member this.Multi (supplier: unit -> 'a, lockObj: obj) =
         if isComputed = 1 then value
-            else
-                lock lockObj (fun () ->
-                    if not (isComputed = 1) then
-                        value <- supplier()
-                        isComputed <- 1
-                    value
-                )
+        else
+            lock lockObj (fun () ->
+                if not (isComputed = 1) then
+                    value <- supplier()
+                    isComputed <- 1
+                value
+            )
 
     member this.LockFree (supplier: unit -> 'a) =
         if isComputed = 1 then
-                value
+            value
+        else
+            let candidate = supplier()
+            if Interlocked.CompareExchange(&isComputed, 1, 0) = 0 then
+                value <- candidate
+                candidate
             else
-                let candidate = supplier()
-                if Interlocked.CompareExchange(&isComputed, 1, 0) = 0 then
-                    value <- candidate
-                    candidate
-                else
-                    Thread.Yield() |> ignore
-                    value
+                Thread.Yield() |> ignore
+                value
 
 
 type SingleLazy<'a>(supplier: unit -> 'a) =
