@@ -1,4 +1,8 @@
-﻿module Program
+﻿// <copyright file="Program.fs" company="_">
+// Marina Popova, 2026, under MIT License.
+// </copyright>
+
+module Program
 
 open PrintStars
 

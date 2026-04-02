@@ -1,4 +1,8 @@
-﻿module Task2.Tests
+﻿// <copyright file="Tests.fs" company="_">
+// Marina Popova, 2026, under MIT License.
+// </copyright>
+
+module Task2.Tests
 
 open NUnit.Framework
 open PrintStars

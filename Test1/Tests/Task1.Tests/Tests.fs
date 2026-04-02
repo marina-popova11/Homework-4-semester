@@ -1,4 +1,8 @@
-﻿module Task1.Tests
+﻿// <copyright file="Tests.fs" company="_">
+// Marina Popova, 2026, under MIT License.
+// </copyright>
+
+module Task1.Tests
 
 open NUnit.Framework
 open Search

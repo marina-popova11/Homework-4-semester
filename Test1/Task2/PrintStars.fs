@@ -1,3 +1,7 @@
+// <copyright file="PrintStars.fs" company="_">
+// Marina Popova, 2026, under MIT License.
+// </copyright>
+
 module PrintStars
 
 // Creates a list of lines, and then connects everything into a string using \n
