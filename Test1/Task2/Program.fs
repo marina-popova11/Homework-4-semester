@@ -1,2 +1,8 @@
-﻿// For more information see https://aka.ms/fsharp-console-apps
-printfn "Hello from F#"
+﻿module Program
+
+open PrintStars
+
+[<EntryPoint>]
+let main _ =
+    let r = printfn "%s" (createLines 4)
+    0
