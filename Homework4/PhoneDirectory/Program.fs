@@ -6,5 +6,5 @@ open DirectoryUI
 [<EntryPoint>]
 let main _ =
     printOptions ()
-    options emptyDatabase
+    workCycle emptyDatabase
     0
