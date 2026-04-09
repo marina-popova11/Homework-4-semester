@@ -3,8 +3,10 @@ module Conversion
 let initialFunction x (lst: int list) =
     List.map (fun y -> x * y) lst
 
-let multiply x y = y * x
+let func1 x = List.map (fun y -> x * y)
 
-let map f = List.map (f)
+let func2 x = List.map ((*) x)
 
-let conversion = multiply >> map
+let func3 = (*) >> List.map
+
+let conversion = func3
