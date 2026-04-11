@@ -5,9 +5,12 @@ type LambdaTerm =
     | App of LambdaTerm * LambdaTerm
     | Abs of string * LambdaTerm
 
-// let newVar old pref =
-//     let rec gen n =
-//         let name = pref
+let newVar (usedVars: Set<string>) (pref: string) =
+    let rec gen n =
+        let name = pref + string n
+        if Set.contains name usedVars then gen (n + 1)
+        else name
+    gen 0
 
 let rec free term =
     match term with
@@ -33,7 +36,9 @@ let rec replace x t s =
     | Abs (y, body) ->
         if Set.contains y (free s) then
             let allVars = Set.union (free body) (free s)
-            let newY = 
+            let newY = newVar allVars "v"
+            let convertedBody = alfaConvert y newY body
+            Abs (newY, replace x convertedBody s)
         else
             Abs (y, replace x body s)
 
