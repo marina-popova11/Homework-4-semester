@@ -1,0 +1,39 @@
+\documentclass[12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath, amssymb}
+
+\begin{document}
+
+\[
+S = \lambda x. \lambda y. \lambda z.\ xz\ (yz)
+\]
+\[
+K = \lambda x. \lambda y.\ x
+\]
+\[
+I = \lambda x.\ x
+\]
+
+\[
+S\ K\ K = (\lambda x. \lambda y. \lambda z.\ x\ z\ (y\ z))\ K\ K
+\]
+\[
+\rightarrow_\beta (\lambda y. \lambda z.\ K\ z\ (y\ z))\ K
+\]
+\[
+\rightarrow_\beta \lambda z.\ K\ z\ (K\ z)
+\]
+\[
+\rightarrow_\beta \lambda z.\ (\lambda y.\ z)\ (K\ z)
+\]
+\[
+\rightarrow_\beta \lambda z.\ z\ =\ I
+\]
+
+\[
+S\ K\ K &= I \qquad \square
+\]
+
+\end{document}

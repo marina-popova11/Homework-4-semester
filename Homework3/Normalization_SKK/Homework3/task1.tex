@@ -1,0 +1,37 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath, amssymb}
+
+\begin{document}
+
+\[
+T_0 = ((\lambda a. (\lambda b. b\ b)\ (\lambda b. b\ b))\ b)\ ((\lambda c. (c\ b))\ (\lambda a. a))
+\]
+
+\[
+(\lambda c. (c\ b))\ (\lambda a. a) \rightarrow_\beta ((\lambda a. a)\ b) \rightarrow_\beta b
+\]
+
+\[
+T_1 = ((\lambda a. (\lambda b. b\ b)\ (\lambda b. b\ b))\ b)\ b
+\]
+
+\[
+((\lambda a. (\lambda b. b\ b)\ (\lambda b. b\ b))\ b) \rightarrow_\beta (\lambda b. b\ b)\ (\lambda b. b\ b)
+\]
+
+\[
+T_2 = ((\lambda b. b\ b)\ (\lambda b. b\ b))\ b
+\]
+
+\[
+(\lambda b. b\ b)\ (\lambda b. b\ b) \rightarrow_\beta (\lambda b. b\ b)\ (\lambda b. b\ b)
+\]
+
+\[
+\text{Нормальная форма не существует (бесконечная редукция)}
+\]
+
+\end{document}
