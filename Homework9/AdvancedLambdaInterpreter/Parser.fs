@@ -4,9 +4,10 @@ open System
 open FParsec
 open Interpreter
 
-type InputObjects =
-    | Definition of (string * LambdaTerm) list
-    | Expression of LambdaTerm
+type InputObjects = {
+    Definition: (string * LambdaTerm) list
+    Expression: LambdaTerm
+}
 
 let spaces: Parser<unit, unit> = skipMany (pchar ' ' <|> pchar '\t' <|> pchar '\n')
 
@@ -36,6 +37,14 @@ let pLambda =
     pSlash >>. many1 (identifier .>> spaces) >>= fun args ->
         pDot >>. pTerm |>> fun body ->
             List.foldBack (fun arg acc -> Abs (arg, acc)) args body
+
+let pSimpleTerm =
+    choice [
+        pLambda
+        pApp
+    ]
+
+do pTermImpl := pSimpleTerm
 
 let pDefinition =
     pLet >>. identifier .>> pEquality .>>. pTerm |>> fun (name, term) -> (name, term)
