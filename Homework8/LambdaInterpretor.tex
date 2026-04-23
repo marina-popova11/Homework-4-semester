@@ -1,0 +1,70 @@
+\documentclass[11pt]{article}
+\usepackage{fontspec}
+\setmainfont{CMU Serif}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+
+\begin{document}
+
+\section*{Грамматика для интерпретатора лямбда-выражений}
+
+\section*{Лексика}
+
+\[
+\begin{array}{lcl}
+\textrm{\textit{Пробел}} & ::= & \texttt{\_} \mid \texttt{\textbackslash t} \mid \texttt{\textbackslash n} \\
+\textrm{\textit{Буква}} & ::= & \texttt{a..z} \mid \texttt{A..Z} \\
+\textrm{\textit{Цифра}} & ::= & \texttt{0..9} \\
+\textrm{\textit{Символ}} & ::= & \textrm{\textit{Буква}} \mid \textrm{\textit{Цифра}} \mid \texttt{\_} \\
+\textrm{\textit{Идентификатор}} & ::= & (\textrm{\textit{Буква}} \mid \texttt{\_}) \; \{ \textrm{\textit{Символ}} \} \\
+\end{array}
+\]
+
+\section*{Грамматика}
+
+\[
+\begin{array}{lcl}
+\textrm{\textit{Программа}} & ::= & \textrm{\textit{Определение}}^* \; \textrm{\textit{Выражение}} \; \texttt{EOF} \\
+\textrm{\textit{Определение}} & ::= & \texttt{let} \; \textrm{\textit{Идентификатор}} \; \texttt{=} \; \textrm{\textit{Выражение}} \; \texttt{\textbackslash n} \\
+\textrm{\textit{Выражение}} & ::= & \textrm{\textit{Лямбда}} \mid \textrm{\textit{Аппликация}} \\
+\textrm{\textit{Лямбда}} & ::= & \texttt{\textbackslash} \; \textrm{\textit{Идентификатор}} \; \{ \textrm{\textit{Идентификатор}} \} \; \texttt{.} \; \textrm{\textit{Выражение}} \\
+\textrm{\textit{Аппликация}} & ::= & \textrm{\textit{Атомарный терм}} \; \{ \textrm{\textit{Атомарный терм}} \} \\
+\textrm{\textit{Атомарный терм}} & ::= &  
+    \texttt{(} \; \textrm{\textit{Выражение}} \; \texttt{)} \;|\;
+    \textrm{\textit{Лямбда}} \\
+\end{array}
+\]
+
+\section*{Примеры вывода}
+\subsection*{1. \texttt{\textbackslash x y.x}}
+
+\[
+\begin{array}{lll}
+\textrm{\textit{Выражение}} & \Rightarrow & \textrm{\textit{Лямбда}} \\
+& \Rightarrow & \texttt{\textbackslash} \; \textrm{\textit{Идентификатор}} \; \{ \textrm{\textit{Идентификатор}} \} \; \texttt{.} \; \textrm{\textit{Выражение}} \\
+& \Rightarrow & \texttt{\textbackslash x} \; \{ \textrm{\textit{Идентификатор}} \} \; \texttt{.} \; \textrm{\textit{Выражение}} \\
+& \Rightarrow & \texttt{\textbackslash x y} \; \{ \} \; \texttt{.} \; \textrm{\textit{Выражение}} \\
+& \Rightarrow & \texttt{\textbackslash x y .} \; \textrm{\textit{Аппликация}} \\
+& \Rightarrow & \texttt{\textbackslash x y .} \; \textrm{\textit{Атомарный терм}} \; \{ \} \\
+& \Rightarrow & \texttt{\textbackslash x y .} \; \textrm{\textit{Идентификатор}} \\
+& \Rightarrow & \texttt{\textbackslash x y . x}
+\end{array}
+\]
+
+\subsection*{2. \texttt{\textbackslash x.(y z)}}
+
+\[
+\begin{array}{lll}
+\textrm{\textit{Выражение}} & \Rightarrow & \textrm{\textit{Лямбда}} \\
+& \Rightarrow & \texttt{\textbackslash} \; \textrm{\textit{Идентификатор}} \; \{ \} \; \texttt{.} \; \textrm{\textit{Выражение}} \\
+& \Rightarrow & \texttt{\textbackslash x .} \; \textrm{\textit{Аппликация}} \\
+& \Rightarrow & \texttt{\textbackslash x .} \; \textrm{\textit{Атомарный терм}} \; \{ \} \\
+& \Rightarrow & \texttt{\textbackslash x .} \; \texttt{(} \; \textrm{\textit{Выражение}} \; \texttt{)} \\
+& \Rightarrow & \texttt{\textbackslash x . (} \; \textrm{\textit{Аппликация}} \; \texttt{)} \\
+& \Rightarrow & \texttt{\textbackslash x . (} \; \textrm{\textit{Атомарный терм}} \; \textrm{\textit{Атомарный терм}} \; \texttt{)} \\
+& \Rightarrow & \texttt{\textbackslash x . (} \; \textrm{\textit{Идентификатор}} \; \textrm{\textit{Идентификатор}} \; \texttt{)} \\
+& \Rightarrow & \texttt{\textbackslash x . (y z)}
+\end{array}
+\]
+
+\end{document}
