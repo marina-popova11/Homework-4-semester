@@ -64,6 +64,20 @@ let pProgram =
 let parseString (str: string) =
     run pProgram str
 
-let parseFile (filePath: string) =
-    let body = System.IO.File.ReadAllText(filePath)
-    run pProgram body
+type ParseError = 
+    | ParserError of string * Position
+    | IOError of string
+
+let parseFile (filePath: string) : Choice<InputObjects, ParseError> =
+    try
+        let body = System.IO.File.ReadAllText(filePath)
+        match run pProgram body with
+        | Success (result, _, _) -> 
+            Choice1Of2 result
+        | Failure (errorMsg, _, state) -> 
+            Choice2Of2 (ParserError (errorMsg, state.Position))
+    with
+    | :? System.IO.FileNotFoundException -> 
+        Choice2Of2 (IOError ("File not found: " + filePath))
+    | e ->
+        Choice2Of2 (IOError ("Error reading file: " + e.Message))
