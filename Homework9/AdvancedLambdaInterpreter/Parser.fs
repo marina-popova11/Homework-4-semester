@@ -9,11 +9,14 @@ type InputObjects = {
     Expression: LambdaTerm
 }
 
+let pTermRef = ref Unchecked.defaultof<Parser<LambdaTerm, unit>>
+
 let spaces: Parser<unit, unit> = skipMany (pchar ' ' <|> pchar '\t' <|> pchar '\n')
 
 let identifier =
     let isChar c = System.Char.IsLetterOrDigit c || c = '_'
     many1Satisfy2L System.Char.IsLetter isChar "identifier"
+
 let pEquality = pchar '=' .>> spaces
 
 let pLet = pstring "let" .>> spaces
@@ -22,11 +25,11 @@ let pSlash = pchar '\\' .>> spaces
 
 let pDot = pchar '.' .>> spaces
 
-let pTerm, pTermImpl = createParserForwardedToRef()
+// let pTerm, pTermImpl = createParserForwardedToRef()
 
 let pAtomTerm =
     choice [
-        between (pchar '(' .>> spaces) (pchar ')' .>> spaces) pTerm
+        between (pchar '(' .>> spaces) (pchar ')' .>> spaces) (!pTermRef)
         identifier |>> Var
     ]
 
@@ -35,7 +38,7 @@ let pApp =
 
 let pLambda =
     pSlash >>. many1 (identifier .>> spaces) >>= fun args ->
-        pDot >>. pTerm |>> fun body ->
+        pDot >>. (!pTermRef) |>> fun body ->
             List.foldBack (fun arg acc -> Abs (arg, acc)) args body
 
 let pSimpleTerm =
@@ -44,7 +47,9 @@ let pSimpleTerm =
         pApp
     ]
 
-do pTermImpl := pSimpleTerm
+do pTermRef := pSimpleTerm
+
+let pTerm = (!pTermRef) 
 
 let pDefinition =
     pLet >>. identifier .>> pEquality .>>. pTerm |>> fun (name, term) -> (name, term)
@@ -65,7 +70,7 @@ let parseString (str: string) =
     run pProgram str
 
 type ParseError = 
-    | ParserError of string * Position
+    | ParserError of string
     | IOError of string
 
 let parseFile (filePath: string) : Choice<InputObjects, ParseError> =
@@ -74,8 +79,8 @@ let parseFile (filePath: string) : Choice<InputObjects, ParseError> =
         match run pProgram body with
         | Success (result, _, _) -> 
             Choice1Of2 result
-        | Failure (errorMsg, _, state) -> 
-            Choice2Of2 (ParserError (errorMsg, state.Position))
+        | Failure (errorMsg, _, state) ->
+            Choice2Of2 (ParserError errorMsg)
     with
     | :? System.IO.FileNotFoundException -> 
         Choice2Of2 (IOError ("File not found: " + filePath))
