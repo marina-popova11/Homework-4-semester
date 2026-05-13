@@ -1,7 +1,12 @@
 module Computer
 
 open System
-open OS
+
+type OS = 
+    | Windows
+    | Linux
+    | MacOS
+    | Other of int
 
 let rnd = Random(DateTime.Now.Millisecond)
 
@@ -9,7 +14,12 @@ type Computer (id: int, os: OS, ?probability: int) =
     let prob =
         match probability with
         | Some p -> p
-        | None -> os.DefaultProbability
+        | None -> 
+            match os with
+            | Windows -> 50
+            | Linux -> 40
+            | MacOS -> 60
+            | Other p -> p
 
     member c.ID = id
     member c.Os = os

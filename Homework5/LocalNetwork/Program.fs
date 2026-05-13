@@ -1,7 +1,6 @@
 ﻿module Program
 
 open System
-open OS
 open Computer
 open Network
 open InfectionSimulation

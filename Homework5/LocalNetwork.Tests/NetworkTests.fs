@@ -1,7 +1,6 @@
 ﻿module LocalNetwork.Tests
 
 open NUnit.Framework
-open OS
 open Computer
 open Network
 open InfectionSimulation
@@ -10,21 +9,15 @@ open InfectionSimulation
 let Test_Probability100 () =
     let computers = [|
         Computer(0, Windows, 100)
-        Computer(1, MacOs, 100)
+        Computer(1, MacOS, 100)
         Computer(2, Linux, 100)
         Computer(3, Windows, 100)
     |]
 
-    let network = Network(computers)
-    network.AddLink(computers.[0], computers.[1])
-    network.AddLink(computers.[1], computers.[2])
-    network.AddLink(computers.[2], computers.[3])
+    let connections = [(0, 1); (1, 2); (2, 3)]
+    let network = Network(computers, connections)
     network.Infect(0)
-    let mutable steps = 0
-    let mutable flag = true
-    while flag do
-        steps <- steps + 1
-        flag <- network.Step()
+    ignore (start network 10)
 
     let allInfected = computers |> Array.forall(fun x -> x.IsInfected)
     Assert.That(allInfected, Is.True)
@@ -32,21 +25,16 @@ let Test_Probability100 () =
 [<Test>]
 let Test_Probability0 () =
     let computers = [|
-        Computer(0, "Windows", 0)
-        Computer(1, "MacOs", 0)
-        Computer(2, "Linux", 0)
+        Computer(0, Windows, 0)
+        Computer(1, MacOS, 0)
+        Computer(2, Linux, 0)
     |]
 
-    let network = Network(computers)
-    network.AddLink(computers.[0], computers.[1])
-    network.AddLink(computers.[1], computers.[2])
+    let connections = [(0, 1); (1, 2)]
+    let network = Network(computers, connections)
     network.Infect(0)
-    let mutable steps = 0
-    let mutable flag = true
-    while flag && steps < 10 do
-        steps <- steps + 1
-        flag <- network.Step()
-
+    for i in 1 .. 10 do
+        ignore (network.Step())
     let onlyFirstInfected = 
         computers.[0].IsInfected && 
         not computers.[1].IsInfected && 
@@ -57,19 +45,15 @@ let Test_Probability0 () =
 [<Test>]
 let Test_IsolatedComputer () =
     let computers = [|
-        Computer(0, "Windows", 100)
-        Computer(1, "MacOs", 100)
-        Computer(2, "Linux", 100)
-        Computer(3, "Windows", 100)
+        Computer(0, Windows, 100)
+        Computer(1, MacOS, 100)
+        Computer(2, Linux, 100)
+        Computer(3, Windows, 100)
     |]
 
-    let network = Network(computers)
-    network.AddLink(computers.[0], computers.[1])
-    network.AddLink(computers.[1], computers.[2])
+    let connections = [(0, 1); (1, 2)]
+    let network = Network(computers, connections)
     network.Infect(0)
-    let mutable flag = true
-    while flag do
-        flag <- network.Step()
 
     let isolated = not computers.[3].IsInfected
     Assert.That(isolated, Is.True)
