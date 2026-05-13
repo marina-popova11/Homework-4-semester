@@ -1,22 +1,23 @@
 module InfectionSimulation
 
 open System
-open NetworkSystem
+open Computer
+open Network
 
 let rnd = new Random()
 
 let chooseRandom number =
     rnd.Next(number)
 
-let start (network: Network) =
+let start (network: Network) (maxSteps: int) =
     let number = chooseRandom network.Size
     network.Infect(number)
-    network.PrintStatus(0)
+    network.PrintStatus()
     let mutable numberSteps = 0
     let mutable flag = true
-    while flag do
+    while flag && numberSteps < maxSteps do
         numberSteps <- numberSteps + 1
         let step = network.Step()
-        network.PrintStatus(numberSteps)
-        if not step then flag <- false
+        network.PrintStatus()
+        flag <- network.CanContinueInfection()
     numberSteps

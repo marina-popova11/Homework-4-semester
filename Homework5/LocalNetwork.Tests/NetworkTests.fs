@@ -1,22 +1,24 @@
 ﻿module LocalNetwork.Tests
 
 open NUnit.Framework
-open NetworkSystem
+open OS
+open Computer
+open Network
 open InfectionSimulation
 
 [<Test>]
 let Test_Probability100 () =
     let computers = [|
-        Computer(0, "Windows", 100)
-        Computer(1, "MacOs", 100)
-        Computer(2, "Linux", 100)
-        Computer(3, "Windows", 100)
+        Computer(0, Windows, 100)
+        Computer(1, MacOs, 100)
+        Computer(2, Linux, 100)
+        Computer(3, Windows, 100)
     |]
 
     let network = Network(computers)
-    network.Add(computers.[0], computers.[1])
-    network.Add(computers.[1], computers.[2])
-    network.Add(computers.[2], computers.[3])
+    network.AddLink(computers.[0], computers.[1])
+    network.AddLink(computers.[1], computers.[2])
+    network.AddLink(computers.[2], computers.[3])
     network.Infect(0)
     let mutable steps = 0
     let mutable flag = true
@@ -36,8 +38,8 @@ let Test_Probability0 () =
     |]
 
     let network = Network(computers)
-    network.Add(computers.[0], computers.[1])
-    network.Add(computers.[1], computers.[2])
+    network.AddLink(computers.[0], computers.[1])
+    network.AddLink(computers.[1], computers.[2])
     network.Infect(0)
     let mutable steps = 0
     let mutable flag = true
@@ -62,8 +64,8 @@ let Test_IsolatedComputer () =
     |]
 
     let network = Network(computers)
-    network.Add(computers.[0], computers.[1])
-    network.Add(computers.[1], computers.[2])
+    network.AddLink(computers.[0], computers.[1])
+    network.AddLink(computers.[1], computers.[2])
     network.Infect(0)
     let mutable flag = true
     while flag do

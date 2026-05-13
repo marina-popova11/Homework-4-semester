@@ -6,7 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="NetworkSystem.fs" />
+    <Compile Include="OS.fs" />
+    <Compile Include="Computer.fs" />
+    <Compile Include="Network.fs" />
     <Compile Include="InfectionSimulation.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
