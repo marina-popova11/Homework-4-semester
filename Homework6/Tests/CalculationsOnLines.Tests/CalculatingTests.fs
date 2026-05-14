@@ -1,9 +1,9 @@
 ﻿module CalculationsOnLines.Tests
 
 open NUnit.Framework
-open CalculateStrings
+open StringCalculationBuilder
 
-let calculate = CalculateBuilder()
+let calculate = StringCalculationBuilder()
 
 [<Test>]
 let Test_AdditionWithValidStrings () =

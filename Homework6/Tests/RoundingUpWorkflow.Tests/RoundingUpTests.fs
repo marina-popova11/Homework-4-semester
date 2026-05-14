@@ -1,6 +1,7 @@
 ﻿module RoundingUpWorkflow.Tests
 
 open NUnit.Framework
+open System
 open RoundingUp
 
 [<Test>]
@@ -23,9 +24,16 @@ let Test_RoundingWithNegativeNumbers (input: float, n: int, result: float) =
     Assert.That(withRounding, Is.EqualTo(result))
 
 [<Test>]
-let Test_WithNegativeAccuracy () =
-    let rounding = RoundingBuilder(-2)
+let Test_WithNegativeAccuracy_ThrowsException () =
+    Assert.Throws<ArgumentOutOfRangeException>(fun () ->
+        let rounding = RoundingBuilder(-2)
+        ()
+    ) |> ignore
+
+[<Test>]
+let Test_WithZeroAccuracy () =
+    let rounding = RoundingBuilder(0)
     let withRounding = rounding {
         return 0.128
     }
-    Assert.That(withRounding, Is.EqualTo(float 0))
+    Assert.That(withRounding, Is.EqualTo(0.0))
