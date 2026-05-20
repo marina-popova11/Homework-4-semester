@@ -2,7 +2,7 @@
 
 open NUnit.Framework
 open System
-open RoundingUp
+open RoundingBuilder
 
 [<Test>]
 let Test_RoundingTo3 () =

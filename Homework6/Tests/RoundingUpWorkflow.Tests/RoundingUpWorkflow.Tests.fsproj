@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="RoundingUpTests.fs" />
+    <Compile Include="RoundingBuilderTests.fs" />
   </ItemGroup>
 
   <ItemGroup>
