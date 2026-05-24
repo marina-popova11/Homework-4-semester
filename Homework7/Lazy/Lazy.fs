@@ -3,52 +3,55 @@ module Lazy
 open System.Threading
 open ILazy
 
-type private LazyState<'a> () =
-    let mutable isComputed = 0
+type private SingleThreadedState<'a>() =
+    let mutable isComputed = false
     let mutable value = Unchecked.defaultof<'a>
 
-    member this.Single (supplier: unit -> 'a) =
-        if not (isComputed = 1) then
+    member this.Compute(supplier: unit -> 'a) : 'a =
+        if not isComputed then
             value <- supplier()
-            isComputed <- 1
+            isComputed <- true
         value
 
-    member this.Multi (supplier: unit -> 'a, lockObj: obj) =
-        if isComputed = 1 then value
+type private LockingState<'a>() =
+    let mutable isComputed = false
+    let mutable value = Unchecked.defaultof<'a>
+    let lockObj = obj()
+    member this.Compute(supplier: unit -> 'a) : 'a =
+        if Volatile.Read(&isComputed) then 
+            value
         else
             lock lockObj (fun () ->
-                if not (isComputed = 1) then
+                if not (Volatile.Read(&isComputed)) then
                     value <- supplier()
-                    isComputed <- 1
+                    Volatile.Write(&isComputed, true)
                 value
             )
 
-    member this.LockFree (supplier: unit -> 'a) =
-        if isComputed = 1 then
-            value
-        else
+type private LockFreeState<'a>() =
+    let mutable state: 'a option = None
+    member this.Compute(supplier: unit -> 'a) : 'a =
+        match Volatile.Read(&state) with
+        | Some v -> v
+        | None ->
             let candidate = supplier()
-            if Interlocked.CompareExchange(&isComputed, 1, 0) = 0 then
-                value <- candidate
-                candidate
-            else
-                Thread.Yield() |> ignore
-                value
+            let original = Interlocked.CompareExchange(&state, Some candidate, None)
+            match original with
+            | None -> candidate
+            | Some v -> v
 
 
 type SingleLazy<'a>(supplier: unit -> 'a) =
-    let lazyState = LazyState<'a>()
+    let lazyState = SingleThreadedState<'a>()
     interface ILazy<'a> with
-        member _.Get() = lazyState.Single(supplier)
+        member _.Get() = lazyState.Compute(supplier)
 
 type MultiLazy<'a> (supplier: unit -> 'a) =
-    let lazyState = LazyState<'a>()
-    let lockObj : obj = new System.Object()
+    let lazyState = LockingState<'a>()
     interface ILazy<'a> with
-        member _.Get() = lazyState.Multi(supplier, lockObj)
+        member _.Get() = lazyState.Compute(supplier)
             
 type LockFreeLazy<'a> (supplier: unit -> 'a) =
-    let lazyState = LazyState<'a>()
-    let lockObj : obj = new System.Object()
+    let lazyState = LockFreeState<'a>()
     interface ILazy<'a> with
-        member this.Get() = lazyState.LockFree(supplier)
+        member this.Get() = lazyState.Compute(supplier)
