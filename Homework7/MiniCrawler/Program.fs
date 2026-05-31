@@ -5,7 +5,9 @@ open Crawler
 
 [<EntryPoint>]
 let main _ =
-    let url  = "http://google.com"
-    parallelDownload url |> Async.RunSynchronously |> ignore
-    printfn "All links successfully downloaded! "
+    async {
+        use client = createHttpClient()
+        let! results = parallelDownload downloadOnePageAsync client "https://google.com"
+        printfn $"Total characters from all pages: {results |> Array.sum}"
+    } |> Async.RunSynchronously
     0
